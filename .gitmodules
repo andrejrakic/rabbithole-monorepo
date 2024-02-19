@@ -1,0 +1,3 @@
+[submodule "week01/usdtExploit/lib/forge-std"]
+	path = week01/usdtExploit/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
