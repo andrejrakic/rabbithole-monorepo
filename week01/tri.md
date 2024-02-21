@@ -1,0 +1,6 @@
+- token i eth pool prilikom kreiranja (mozda kao Uniswap, 500 SOCKS i 35 ETH)...proveri da li moze constructor da bude payable u Solidityju
+- Do not rely on balance(this)
+- Uvedi sleepage za cenu i prilikom kupovine i prilikom prodaje
+- Gas cap nije dobar jer miner svakako moze da reorderuje transackije tako da ostvari profit, to objasni
+- Uvek koristi SafeERC20 iako za ovaj tvoj primer realno ni ne treba
+- Vizualizuj krivu u READMEju preko one matx za github formule

@@ -8,6 +8,7 @@ contract TokenWithSanctions is ERC20, Ownable {
     mapping(address tokenHolder => bool isBanned) internal s_banned;
 
     event Banned(address indexed tokenHolder);
+    event Unbanned(address indexed tokenHolder);
 
     error TokenWithSanctions__BannedFromSending(address);
     error TokenWithSanctions__BannedFromReceiving(address);
@@ -25,6 +26,12 @@ contract TokenWithSanctions is ERC20, Ownable {
         s_banned[_tokenHolder] = true;
 
         emit Banned(_tokenHolder);
+    }
+
+    function unban(address _tokenHolder) external onlyOwner {
+        s_banned[_tokenHolder] = false;
+
+        emit Unbanned(_tokenHolder);
     }
 
     function isBanned(address _tokenHolder) public view returns (bool) {
