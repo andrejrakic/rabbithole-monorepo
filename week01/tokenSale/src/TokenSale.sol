@@ -57,12 +57,14 @@ contract TokenSale is ReentrancyGuard {
     }
 
     function calculateBuyingPrice(uint256 amountOfTokensToBuy) public view returns (uint256 priceInEth) {
+        // +1 to round in favor of the protocol
         priceInEth = ((amountOfTokensToBuy * i_slope) / 2) * (2 * i_tokenOnSale.totalSupply() + amountOfTokensToBuy + 1);
     }
 
     function calculateSellingPrice(uint256 amountOfTokensToSell) public view returns (uint256 priceInEth) {
         uint256 tokenSupplyAfter = i_tokenOnSale.totalSupply() - amountOfTokensToSell;
-        priceInEth = ((amountOfTokensToSell * i_slope) / 2) * (2 * tokenSupplyAfter + amountOfTokensToSell + 1);
+        // no +1 to round in favor of the protocol
+        priceInEth = ((amountOfTokensToSell * i_slope) / 2) * (2 * tokenSupplyAfter + amountOfTokensToSell);
     }
 
     function getMyToken() public view returns (address) {

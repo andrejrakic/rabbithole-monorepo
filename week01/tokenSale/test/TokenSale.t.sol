@@ -52,11 +52,10 @@ contract TokenSaleTest is Test {
 
         vm.startPrank(alice);
         uint256 sellingPriceInEth = tokenSale.calculateSellingPrice(amountOfTokens);
-        uint256 expectedSellingPrice = 40 ether;
-        uint256 expectedProfit = expectedSellingPrice - expectedPrice;
-        assertEq(sellingPriceInEth, expectedSellingPrice);
+        uint256 mainimumEthWillingToReceive = 35 ether;
+        uint256 expectedProfit = sellingPriceInEth - expectedPrice;
 
-        tokenSale.sellTokensForEth(amountOfTokens, expectedSellingPrice);
+        tokenSale.sellTokensForEth(amountOfTokens, mainimumEthWillingToReceive);
 
         assertEq(alice.balance, userStartingBalance + expectedProfit);
         assertEq(address(tokenSale).balance, priceInEth + secondBuyPriceInEth - sellingPriceInEth);
