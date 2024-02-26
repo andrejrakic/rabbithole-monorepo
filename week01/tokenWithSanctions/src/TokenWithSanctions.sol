@@ -5,7 +5,7 @@ import {ERC20} from "./vendor/openzeppelin/contracts/v5.0.0/token/ERC20/ERC20.so
 import {Ownable} from "./utils/Ownable.sol";
 
 contract TokenWithSanctions is ERC20, Ownable {
-    mapping(address tokenHolder => bool isBanned) internal s_banned;
+    mapping(address tokenHolder => uint256 isBanned) internal s_banned;
 
     event Banned(address indexed tokenHolder);
     event Unbanned(address indexed tokenHolder);
@@ -20,24 +20,28 @@ contract TokenWithSanctions is ERC20, Ownable {
     }
 
     function ban(address _tokenHolder) external onlyOwner {
-        s_banned[_tokenHolder] = true;
+        s_banned[_tokenHolder] = 1;
 
         emit Banned(_tokenHolder);
     }
 
     function unban(address _tokenHolder) external onlyOwner {
-        s_banned[_tokenHolder] = false;
+        s_banned[_tokenHolder] = 0;
 
         emit Unbanned(_tokenHolder);
     }
 
-    function isBanned(address _tokenHolder) public view returns (bool) {
+    function isBanned(address _tokenHolder) public view returns (uint256) {
         return s_banned[_tokenHolder];
     }
 
     function _update(address from, address to, uint256 amount) internal virtual override {
-        if (isBanned(from)) revert TokenWithSanctions__BannedFromSending(from);
-        if (isBanned(to)) revert TokenWithSanctions__BannedFromReceiving(to);
+        if (isBanned(from) == 1) {
+            revert TokenWithSanctions__BannedFromSending(from);
+        }
+        if (isBanned(to) == 1) {
+            revert TokenWithSanctions__BannedFromReceiving(to);
+        }
 
         super._update(from, to, amount);
     }

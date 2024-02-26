@@ -10,6 +10,9 @@ contract TokenWithSanctionsTest is Test {
     address alice;
     address bob;
 
+    uint256 constant TRUE = 1;
+    uint256 constant FALSE = 0;
+
     function setUp() public {
         owner = makeAddr("owner");
         alice = makeAddr("alice");
@@ -18,7 +21,7 @@ contract TokenWithSanctionsTest is Test {
         tokenWithSanctions = new TokenWithSanctions(owner, address(0));
     }
 
-    function test_Soak() public {
+    function test_smoke() public {
         vm.startPrank(owner);
         uint256 amountToMint = 100;
         tokenWithSanctions.mint(alice, amountToMint);
@@ -38,7 +41,7 @@ contract TokenWithSanctionsTest is Test {
 
         vm.startPrank(owner);
         tokenWithSanctions.ban(alice);
-        assertEq(tokenWithSanctions.isBanned(alice), true);
+        assertEq(tokenWithSanctions.isBanned(alice), TRUE);
         vm.stopPrank();
 
         vm.startPrank(alice);
