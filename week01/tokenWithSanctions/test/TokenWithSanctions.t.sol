@@ -32,14 +32,8 @@ contract TokenWithSanctionsTest is Test {
         vm.startPrank(alice);
         uint256 amountToTransfer = 20;
         tokenWithSanctions.transfer(bob, amountToTransfer);
-        assertEq(
-            tokenWithSanctions.balanceOf(alice),
-            amountToMint - amountToTransfer
-        );
-        assertEq(
-            tokenWithSanctions.balanceOf(bob),
-            amountToMint + amountToTransfer
-        );
+        assertEq(tokenWithSanctions.balanceOf(alice), amountToMint - amountToTransfer);
+        assertEq(tokenWithSanctions.balanceOf(bob), amountToMint + amountToTransfer);
         vm.stopPrank();
 
         vm.startPrank(owner);
@@ -49,36 +43,20 @@ contract TokenWithSanctionsTest is Test {
 
         vm.startPrank(alice);
         vm.expectRevert(
-            abi.encodeWithSelector(
-                TokenWithSanctions
-                    .TokenWithSanctions__BannedFromSending
-                    .selector,
-                alice
-            )
+            abi.encodeWithSelector(TokenWithSanctions.TokenWithSanctions__BannedFromSending.selector, alice)
         );
         tokenWithSanctions.transfer(bob, amountToTransfer);
         vm.stopPrank();
 
         vm.startPrank(bob);
         vm.expectRevert(
-            abi.encodeWithSelector(
-                TokenWithSanctions
-                    .TokenWithSanctions__BannedFromReceiving
-                    .selector,
-                alice
-            )
+            abi.encodeWithSelector(TokenWithSanctions.TokenWithSanctions__BannedFromReceiving.selector, alice)
         );
         tokenWithSanctions.transfer(alice, amountToTransfer);
         vm.stopPrank();
 
         // sanity check
-        assertEq(
-            tokenWithSanctions.balanceOf(alice),
-            amountToMint - amountToTransfer
-        );
-        assertEq(
-            tokenWithSanctions.balanceOf(bob),
-            amountToMint + amountToTransfer
-        );
+        assertEq(tokenWithSanctions.balanceOf(alice), amountToMint - amountToTransfer);
+        assertEq(tokenWithSanctions.balanceOf(bob), amountToMint + amountToTransfer);
     }
 }

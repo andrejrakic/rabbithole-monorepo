@@ -24,8 +24,9 @@ abstract contract Ownable {
     }
 
     constructor(address newOwner, address pendingOwner) {
-        if (newOwner == address(0))
+        if (newOwner == address(0)) {
             revert Ownable__CannotSetOwnerToZeroAddress();
+        }
 
         _owner = newOwner;
 
@@ -95,8 +96,9 @@ abstract contract Ownable {
     }
 
     function _transferOwnership(address newOwner) private {
-        if (newOwner == address(0))
+        if (newOwner == address(0)) {
             revert Ownable__CannotSetOwnerToZeroAddress();
+        }
         if (newOwner == msg.sender) revert Ownable__CannotTransferToSelf();
 
         _pendingOwner = newOwner;

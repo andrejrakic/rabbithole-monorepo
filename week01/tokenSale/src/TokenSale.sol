@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.20;
 
 import {MyToken} from "./MyToken.sol";
 import {ReentrancyGuard} from "./vendor/openzeppelin/contracts/v5.0.0/utils/ReentrancyGuard.sol";

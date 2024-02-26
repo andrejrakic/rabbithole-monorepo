@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity 0.8.20;
 
 import {ERC20} from "./vendor/openzeppelin/contracts/v5.0.0/token/ERC20/ERC20.sol";
 import {Ownable} from "./utils/Ownable.sol";
@@ -13,10 +13,7 @@ contract TokenWithSanctions is ERC20, Ownable {
     error TokenWithSanctions__BannedFromSending(address);
     error TokenWithSanctions__BannedFromReceiving(address);
 
-    constructor(
-        address _owner,
-        address _pendingOwner
-    ) ERC20("MyToken", "MTK") Ownable(_owner, _pendingOwner) {}
+    constructor(address _owner, address _pendingOwner) ERC20("MyToken", "MTK") Ownable(_owner, _pendingOwner) {}
 
     function mint(address _to, uint256 _amount) external onlyOwner {
         _mint(_to, _amount);
@@ -38,11 +35,7 @@ contract TokenWithSanctions is ERC20, Ownable {
         return s_banned[_tokenHolder];
     }
 
-    function _update(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual override {
+    function _update(address from, address to, uint256 amount) internal virtual override {
         if (isBanned(from)) revert TokenWithSanctions__BannedFromSending(from);
         if (isBanned(to)) revert TokenWithSanctions__BannedFromReceiving(to);
 
