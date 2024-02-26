@@ -35,7 +35,7 @@ contract TokenWithSanctions is ERC20, Ownable {
         return s_banned[_tokenHolder];
     }
 
-    function _update(address from, address to, uint256 amount) internal virtual override {
+    function _update(address from, address to, uint256 amount) internal override {
         if (isBanned(from) == 1) {
             revert TokenWithSanctions__BannedFromSending(from);
         }
