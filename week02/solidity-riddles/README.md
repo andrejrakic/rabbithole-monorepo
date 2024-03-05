@@ -4,5 +4,5 @@ A set of CTFs to fill in the gaps of other CTF collections. Inspired by [Etherna
 
 ### Solutions
 
-[Overmint1Attacker.sol](./contracts/Overmint1Attacker.sol)
-[Overmint2Attacker.sol](./contracts/Overmint2Attacker.sol)
+-   [Overmint1Attacker.sol](./contracts/Overmint1Attacker.sol)
+-   [Overmint2Attacker.sol](./contracts/Overmint2Attacker.sol)
