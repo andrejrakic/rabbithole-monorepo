@@ -193,7 +193,7 @@ Address 0x0000000000000000000000000cdb1e900885fadd99d9955f5fb8e9f6acca8bd7 trans
 
 Credits: https://twitter.com/Web3Coach/status/1418185061942370304
 
-Why searching like this is way faster than going through all of the transactions? It is because of the something called the Bloom filter.
+Why searching like this is way faster than going through all of the transactions? It is because of something called the Bloom filter.
 
 Bloom filter is a space-efficient **probabilistic** data structure that is used to test whether an element is a member of a set. It is an optimization technique to avoid expensive database queries for content that is definitely not in the DB.
 
