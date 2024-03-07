@@ -210,6 +210,76 @@ Yes? The node re-executes the transactions from that block, regenerating the log
 
 ### Other alternative - The Graph
 
-The Graph is an blockchain indexing protocol, and I wrote about it at this Medium article: https://andrej-rakic.medium.com/the-graph-is-awesome-b25c5e6b79da
+The Graph is a blockchain indexing protocol, and I wrote about it in this Medium article: https://andrej-rakic.medium.com/the-graph-is-awesome-b25c5e6b79da
 
-Here I will display how one can use The Graph to accomplish solving the same problem.
+Here I will display how one can use The Graph to accomplish solving the same problem. After the initial project setup, one should develop the following or similar GraphQl schema:
+
+```graphql
+interface NFT {
+  id: ID!
+
+  "Punk index"
+  tokenId: BigInt!
+
+  "Punk owner"
+  owner: Account!
+}
+
+type Punk implements NFT @entity {
+  "Punk ID"
+  id: ID!
+
+  "Punk tokenId"
+  tokenId: BigInt!
+
+  "Current owner of Punk"
+  owner: Account!
+
+  "Wrap Status"
+  wrapped: Boolean!
+
+  "Number of times Punk has been transferred"
+  numberOfTransfers: BigInt!
+}
+
+type Account @entity {
+  "Ethereum Address"
+  id: Bytes!
+
+  "All Punks owned by Account"
+  punksOwned: [Punk!] @derivedFrom(field: "owner")
+}
+```
+
+Then the next step will be to populate the schema using AssemblyScript, based on each event that happened.
+
+```ts
+export const BIGINT_ONE = BigInt.fromI32(1);
+
+// PunkTransfer(address indexed from, address indexed to, uint256 punkIndex);
+export function handlePunkTransfer(event: PunkTransfer): void {
+  log.debug("handlePunkTransfer from: {} to: {}", [event.params.from.toHexString(), event.params.to.toHexString()]);
+
+  let punkEntity = Punk.load(event.params.punkIndex.toHex());
+  if (!punkEntity) {
+    punkEntity = new Invoice(event.params.punkIndex.toHex());
+  }
+
+  punkEntity.tokenId = event.params.punkIndex.toHex();
+  punkEntity.owner = event.params.to.toHexString();
+  punkEntity.numberOfTransfers = punkEntity.numberOfTransfers.plus(BIGINT_ONE);
+
+  punkEntity.save();
+
+  let fromAccountEntity = Account.load(event.transaction.from.toHex());
+  fromAccountEntity.punksOwned.remove(punkEntity);
+  fromAccountEntity.save();
+
+  let toAccountEntity = Account.load(event.transaction.to.toHex());
+  if (!toAccountEntity) {
+    toAccountEntity = new User(event.transaction.to.toHex());
+  }
+  toAccountEntity.punksOwned.add(punkEntity);
+  toAccountEntity.save();
+}
+```
